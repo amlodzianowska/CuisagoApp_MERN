@@ -85,3 +85,11 @@ h5 {
     padding: 20px;
     background-color: rgba(0,0,0,0.4);
 }
+
+.endDateHover {
+    cursor: pointer;
+}
+
+label {
+    font-weight: lighter;
+}

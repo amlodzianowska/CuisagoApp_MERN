@@ -9,9 +9,19 @@ const Event = mongoose.model(
             required: [true, "Title is required!"],
             minlength: [2, "Title must be at least 2 characters long!"],
         },
-        date:{
+        startDate:{
             type: Date,
             // required: [true, "Date is required!"]
+        },
+        endDate:{
+            type: Date,
+            // required: [true, "Date is required!"]
+        },
+        startTime:{
+            type: Date,
+        },
+        endTime:{
+            type: Date,
         },
         neighborhood: {
             type: String,

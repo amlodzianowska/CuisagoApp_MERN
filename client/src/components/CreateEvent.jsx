@@ -7,13 +7,16 @@ import moment from 'moment'
 
 const CreateEvent = () => {
     const history = useHistory();
-    const [loggedin, setloggedin] = useState({});
+    const [loggedinuser, setloggedinuser] = useState(null)
     const [loggedinId, setLoggedinId] = useState("");
     const allNeighborhoods = ["River North", "Lincoln Park", "Chinatown", "Hyde Park", "Little Village", "Garfield Park", "Lake View", "West Loop", "Logan Square", "Austin", "Englewood", "South Chicago", "Little Italy", "Wicker Park", "South Loop", "Albany Park", "Humboldt Park", "Old Town", "Fulton Market", "Wrigleyville", "Back of the Yards", "Bronzeville", "Roscoe Village", "Ukrainian Village", "Bucktown", "Printer's Row"].sort()
 
     const [formInfo,setFormInfo] = useState({
         title: "",
-        date: "",
+        startDate: "",
+        endDate: "",
+        startTime: "",
+        endTime: "",
         neighborhood: "",
         theme: "",
         description: "",
@@ -22,16 +25,23 @@ const CreateEvent = () => {
 
     const [formErrors, setFormErrors] = useState({
         title: "",
-        date: "",
+        startDate: "",
+        endDate: "",
+        startTime: "",
+        endTime: "",
         neighborhood: "",
         theme: "",
+    })
+
+    const [endDate, setEndDate] = useState({
+        end : false
     })
     
     useEffect(()=>{
         axios.get("http://localhost:8000/api/user/loggedin", {withCredentials:true})
         .then(res=>{
             console.log("logged in user data",res)
-            setloggedin(res.data.user)
+            setloggedinuser(res.data.user)
             setLoggedinId(res.data.user._id)
             setFormInfo({
                 ...formInfo,
@@ -64,14 +74,20 @@ const CreateEvent = () => {
                     console.log("success")
                     setFormInfo({
                         title: "",
-                        date: "",
+                        startDate: "",
+                        endDate: "",
+                        startTime: "",
+                        endTime: "",
                         neighborhood: "",
                         theme: ""
                     })
                     //if there's any existing previouse error messages, clear them out upon submittal
                     setFormErrors({
                         title: "",
-                        date: "",
+                        startDate: "",
+                        endDate: "",
+                        startTime: "",
+                        endTime: "",
                         neighborhood: "",
                         theme: ""
                     })
@@ -79,6 +95,20 @@ const CreateEvent = () => {
                 }
             })
             .catch(err=>console.log({err}))
+    }
+
+    const endDateAdd = (e) => {
+        if (endDate.end == true){
+            setEndDate({
+                ...endDate,
+                end : false
+            })
+        }else{
+            setEndDate({
+                ...endDate,
+                end : true
+            })
+        }
     }
 
     return (
@@ -89,27 +119,51 @@ const CreateEvent = () => {
                     <div className="row">
                         <form onSubmit={createEvent} className="container" className={styles.formBox}>
                             <div className="form-group">
-                                <label>Title*:</label>
+                                <label class="d-flex justify-content-start">Title*:</label>
                                 <input onChange={changeHandler} type="text" name="title" className="form-control" style = {{marginTop: "5px"}} value={formInfo.title} placeholder="Event name" />
                                 <p className="text-danger">{formErrors.title?.message}</p>
                             </div>
-                            <label>Start Date and Time*:</label>
+                            <label class="d-flex justify-content-start">Start Date and Time*:</label>
                             <div className="row">
                                 <div className="col-7">
                                     <div className="form-group">
-                                        <input onChange={changeHandler} type="date" name="date" className="form-control" style = {{marginTop: "5px"}} value={formInfo.date} placeholder="Start Date"/>
-                                        <p className="text-danger">{formErrors.date?.message}</p>
+                                        <input onChange={changeHandler} type="date" name="startDate" className="form-control" style = {{marginTop: "5px"}} value={formInfo.startDate}/>
+                                        {/* <p className="text-danger">{formErrors.startDate?.message}</p> */}
                                     </div>
                                 </div>
                                 <div className="col-5">
                                     <div className="form-group">
-                                        <input onChange={changeHandler} type="time" name="time" className="form-control" style = {{marginTop: "5px"}} value={formInfo.time} />
-                                        <p className="text-danger">{formErrors.time?.message}</p>
+                                        <input onChange={changeHandler} type="time" name="startTime" className="form-control" style = {{marginTop: "5px"}} value={formInfo.startTime} />
+                                        {/* <p className="text-danger">{formErrors.startTime?.message}</p> */}
                                     </div>
                                 </div>
                             </div>
+                            {endDate.end?
+                                <div>
+                                    <label class="d-flex justify-content-start">End Date and Time:</label>
+                                    <div className="row">
+                                        <div className="col-7">
+                                            <div className="form-group">
+                                                <input onChange={changeHandler} type="date" name="endDate" className="form-control" style = {{marginTop: "5px"}} value={formInfo.endDate}/>
+                                                {/* <p className="text-danger">{formErrors.endDate?.message}</p> */}
+                                            </div>
+                                        </div>
+                                        <div className="col-5">
+                                            <div className="form-group">
+                                                <input onChange={changeHandler} type="time" name="endTime" className="form-control" style = {{marginTop: "5px"}} value={formInfo.endTime} />
+                                                {/* <p className="text-danger">{formErrors.endTime?.message}</p> */}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>:
+                                <div> </div>
+                            }
+                            {endDate.end?
+                                <p className={ styles.endDateHover } onClick={endDateAdd}>-End Date and Time</p>:
+                                <p className={ styles.endDateHover } onClick={endDateAdd}>+End Date and Time</p>
+                            }
                             <div className="form-group">
-                                <label>Neighborhood:</label>
+                                <label class="d-flex justify-content-start">Neighborhood:</label>
                                 <select onChange={changeHandler} className="form-select" style = {{marginTop: "5px"}} aria-label="Default select example" name="neighborhood">
                                     <option value="">Choose your neighborhood</option>
                                     {
@@ -123,12 +177,12 @@ const CreateEvent = () => {
                                 {/* <p className="text-danger">{formErrors.password?.message}</p> */}
                             </div>
                             <div className="form-group">
-                                <label>Theme*:</label>
+                                <label class="d-flex justify-content-start">Theme*:</label>
                                 <input onChange={changeHandler} type="text" name="theme" className="form-control" style = {{marginTop: "5px"}} value={formInfo.theme} />
                                 {/* <p className="text-danger">{formErrors.theme?.message}</p> */}
                             </div>
                             <div className="form-group">
-                                <label>Description*:</label>
+                                <label class="d-flex justify-content-start">Description*:</label>
                                 <textarea onChange={changeHandler} name="description" class="form-control" style = {{marginTop: "5px"}} rows="5">{formInfo.description}</textarea>
                                 <p className="text-danger">{formErrors.description?.message}</p>
                             </div>
@@ -145,6 +199,8 @@ const CreateEvent = () => {
                                     </div>
                                     <h6 className={styles.date}>{formInfo.date==""?<h6 style={{color: 'lightgrey', marginTop:"10px"}}>EVENT DATE</h6>:moment(formInfo.date).format('MMMM Do, YYYY').toUpperCase()}</h6>
                                     <h4 className={styles.title}>{formInfo.title==""?<h4 style={{color: 'grey', fontWeight: 'bold'}}>Event Title</h4>:formInfo.title}</h4>
+                                    {loggedinuser?<p class="text-start fw-light">Hosted by <span class="fw-bolder">{loggedinuser.username}</span></p>:<p class="text-start fw-light">Hosted by</p>}
+                                    <hr />
                                     <div>
                                         <p className={styles.details}>
                                         {formInfo.description}
