@@ -1,12 +1,8 @@
 .backgroundColor {
     /* background-image: url("../images/background.jpg"); */
     
-    background-image: url("../images/backgroundlonger3.jpg");
-}
-.background {
-    /* background-image: url("../images/background.jpg"); */
-    /* background-color: rgba(41,42,46,0.5); */
-    height: 1068px;
+    background-image: url("../images/backgroundlonger31.jpg");
+    height: auto;
 }
 
 .formBox {
@@ -88,6 +84,8 @@ h5 {
 
 .endDateHover {
     cursor: pointer;
+    text-align: start;
+    margin-top: 5px;
 }
 
 label {
