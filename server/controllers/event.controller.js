@@ -18,13 +18,6 @@ class EventController {
             })
             .catch(err=>res.json({err}))
     }
-    // createEvent(req, res){
-    //     Event.create(req.body)
-    //         .then(newEvent => {
-    //             res.json({results: newEvent})
-    //         })
-    //         .catch(err=>res.json({err}))
-    // }
 
     //watch for _id! (remembre underscore)
     findOneEvent(req, res){
@@ -61,6 +54,15 @@ class EventController {
             .populate("host_id", "username")
             .then(hostsEvents =>{
                 res.json({results: hostsEvents})
+            })
+            .catch(err=>res.json({err}))
+    }
+
+    findNeighborhoodEvents(req,res){
+        Neighborhood.find({neighborhood_id:req.params.neighborhoodid}) //these are mongoose built-in methods
+            .populate("neighborhood_id", "username")
+            .then(neighborhoodEvents =>{
+                res.json({results: neighborhoodEvents})
             })
             .catch(err=>res.json({err}))
     }

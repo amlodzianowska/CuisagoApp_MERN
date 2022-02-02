@@ -5,10 +5,11 @@ import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import CreateEvent from './components/CreateEvent';
 import {BrowserRouter,Switch,Route,Link} from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
-    <div className="App">
+    <div className="App" style={{backgroundColor:"blanchedalmond"}}>
       <BrowserRouter>
         <Switch>
           <Route exact path="/">

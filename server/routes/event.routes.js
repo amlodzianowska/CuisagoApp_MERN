@@ -8,4 +8,5 @@ module.exports = app => {
     app.delete("/api/events/:id", EventController.deleteOneEvent)
     //show all the events that belong to one host
     app.get("/api/host/events/:hostid", EventController.findHostEvents)
+    app.get("/api/events/neighborhood/:neighborhoodId", EventController.findNeighborhoodEvents)
 }

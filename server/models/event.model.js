@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const User = require("../models/user.model");
+const Neighborhood = require("../models/neighborhood.model");
 
 const Event = mongoose.model(
     "Event",
@@ -18,14 +19,14 @@ const Event = mongoose.model(
             // required: [true, "Date is required!"]
         },
         startTime:{
-            type: Date,
+            type: String,
         },
         endTime:{
-            type: Date,
+            type: String,
         },
         neighborhood: {
-            type: String,
-            // required: [true, "Neighborhood is required!"]
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Neighborhood"
         },
         theme: {
             type: String,
@@ -34,6 +35,12 @@ const Event = mongoose.model(
         description: {
             type: String
         },
+        isPaid: {
+            type: Boolean
+        },
+        price: {
+            type: Number
+        },
         capacity: {
             type: Number
         },
@@ -41,6 +48,11 @@ const Event = mongoose.model(
             {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
+            },
+        neighborhoodId: 
+            {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Neighborhood"
             }
         // guests: [
         //     {

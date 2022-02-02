@@ -9,8 +9,11 @@ const CreateEvent = () => {
     const history = useHistory();
     const [loggedinuser, setloggedinuser] = useState(null)
     const [loggedinId, setLoggedinId] = useState("");
-    const allNeighborhoods = ["River North", "Lincoln Park", "Chinatown", "Hyde Park", "Little Village", "Garfield Park", "Lake View", "West Loop", "Logan Square", "Austin", "Englewood", "South Chicago", "Little Italy", "Wicker Park", "South Loop", "Albany Park", "Humboldt Park", "Old Town", "Fulton Market", "Wrigleyville", "Back of the Yards", "Bronzeville", "Roscoe Village", "Ukrainian Village", "Bucktown", "Printer's Row"].sort()
+    const [allNeighborhoods, setAllNeighborhoods] = useState([])
+    
+    
     const allCuisines = ["American", "Turkish", "French", "Chinese", "Japanese", "Indian", "Italian", "Greek", "Spanish", "Polish", "Mediterranean", "Mexican", "Brazilian", "Vegetarian", "Vegan", "Other"].sort()
+    const dateToday = new Date()
 
     const [formInfo,setFormInfo] = useState({
         title: "",
@@ -21,6 +24,8 @@ const CreateEvent = () => {
         neighborhood: "",
         theme: "",
         description: "",
+        isPaid: false,
+        price: "",
         hostId: ""
     })
 
@@ -56,14 +61,18 @@ const CreateEvent = () => {
             console.log(err)
         })
     }, [loggedinId])
+
+    useEffect(()=>{
+        axios.get("http://localhost:8000/api/neighborhoods")
+            .then(response=>{
+                console.log("response when getting all neighborhoods: ", response)
+                setAllNeighborhoods(response.data.results)
+            })
+            .catch(err=>console.log("error: ", err))
+    },[])
     
     
-    // const changeHandler = (e)=>{
-    //     setFormInfo({
-    //         ...formInfo,
-    //         [e.target.name]: e.target.value
-    //     })
-    // }
+
 
     const changeHandler = (e)=>{
         // formatting time from input to a 12 hour standard
@@ -82,6 +91,13 @@ const CreateEvent = () => {
                     ...formInfo,
                     [e.target.name]: timeFinal
             })}
+        // the rest of the form fields (other than time fields)
+        }
+        else if(e.target.type==="checkbox"){
+            setFormInfo({
+                ...formInfo,
+                [e.target.name]: !formInfo.isPaid
+            })
         }else{
             setFormInfo({
                 ...formInfo,
@@ -161,126 +177,139 @@ const CreateEvent = () => {
             <Navbar/>
             <div className="container" style = {{marginTop:"20px"}}>
                 <div className="row">
-                    <form onSubmit={createEvent} className="container" className={styles.formBox}>
-                        {next.next?
-                            <div>
-                                <div className="form-group">
-                                    <label class="d-flex justify-content-start">Title*:</label>
-                                    <input onChange={changeHandler} type="text" name="title" className="form-control" style = {{marginTop: "5px"}} value={formInfo.title} placeholder="Event name" />
-                                    <p className="text-danger">{formErrors.title?.message}</p>
-                                </div>
-                                <label class="d-flex justify-content-start">Start Date and Time*:</label>
-                                <div className="row">
-                                    <div className="col-7">
-                                        <div className="form-group">
-                                            <input onChange={changeHandler} type="date" name="startDate" className="form-control" style = {{marginTop: "5px"}} value={formInfo.startDate}/>
-                                            {/* <p className="text-danger">{formErrors.startDate?.message}</p> */}
+                    <div className="col-4">
+                        <form onSubmit={createEvent} className="container" className={styles.formBox}>
+                            {next.next?
+                                <div>
+                                    <div className="form-group">
+                                        <label class="d-flex justify-content-start">Title*:</label>
+                                        <input onChange={changeHandler} type="text" name="title" className="form-control" style = {{marginTop: "5px"}} value={formInfo.title} placeholder="Event name" />
+                                        <p className="text-danger">{formErrors.title?.message}</p>
+                                    </div>
+                                    <label class="d-flex justify-content-start">Start Date and Time*:</label>
+                                    <div className="row">
+                                        <div className="col-7">
+                                            <div className="form-group">
+                                                <input onChange={changeHandler} type="date" name="startDate" className="form-control" style = {{marginTop: "5px"}} value={formInfo.startDate} min={dateToday}/>
+                                                {/* <p className="text-danger">{formErrors.startDate?.message}</p> */}
+                                            </div>
+                                        </div>
+                                        <div className="col-5">
+                                            <div className="form-group">
+                                                <input onChange={changeHandler} type="time" name="startTime" className="form-control" style = {{marginTop: "5px"}} value={formInfo.startTime} />
+                                                {/* <p className="text-danger">{formErrors.startTime?.message}</p> */}
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="col-5">
-                                        <div className="form-group">
-                                            <input onChange={changeHandler} type="time" name="startTime" className="form-control" style = {{marginTop: "5px"}} value={formInfo.startTime} />
-                                            {/* <p className="text-danger">{formErrors.startTime?.message}</p> */}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="mt-3">
-                                    {endDate.end?
-                                        <div>
-                                            <label class="d-flex justify-content-start">End Date and Time:</label>
-                                            <div className="row">
-                                                <div className="col-7">
-                                                    <div className="form-group">
-                                                        <input onChange={changeHandler} type="date" name="endDate" className="form-control" style = {{marginTop: "5px"}} value={formInfo.endDate}/>
-                                                        {/* <p className="text-danger">{formErrors.endDate?.message}</p> */}
-                                                    </div>
-                                                </div>
-                                                <div className="col-5">
+                                    <div className="mt-3">
+                                        {endDate.end?
+                                            <div>
+                                                <label class="d-flex justify-content-start">End Time:</label>
+                                                <div className="row">
+                                                    {/* <div className="col-7">
+                                                        <div className="form-group">
+                                                            <input onChange={changeHandler} type="date" name="endDate" className="form-control" style = {{marginTop: "5px"}} value={formInfo.endDate}/>
+                                                        </div>
+                                                    </div> */}
+                                                    {/* <div className="col-5"> */}
                                                     <div className="form-group">
                                                         <input onChange={changeHandler} type="time" name="endTime" className="form-control" style = {{marginTop: "5px"}} value={formInfo.endTime} />
-                                                        {/* <p className="text-danger">{formErrors.endTime?.message}</p> */}
                                                     </div>
+                                                    {/* </div> */}
                                                 </div>
-                                            </div>
-                                        </div>:
-                                        <div> </div>
-                                    }
-                                </div>
-                                <div className="mt-2">
-                                    {endDate.end?
-                                        <p className={ styles.endDateHover } onClick={endDateAdd}>-End Date and Time</p>:
-                                        <p className={ styles.endDateHover } onClick={endDateAdd}>+End Date and Time</p>
-                                    }
-                                </div>
-                                <div className="form-group">
-                                    <label class="d-flex justify-content-start">Neighborhood:</label>
-                                    <select onChange={changeHandler} className="form-select" style = {{marginTop: "5px"}} aria-label="Default select example" name="neighborhood">
-                                        <option value="">Choose your neighborhood</option>
-                                        {
-                                            allNeighborhoods.map((neigh, i)=>{
-                                                return (
-                                                    <option key = {i} value={neigh}>{neigh}</option>
-                                                )
-                                            })
+                                            </div>:
+                                            <div> </div>
                                         }
-                                    </select>
-                                    {/* <p className="text-danger">{formErrors.password?.message}</p> */}
-                                </div>
-                                
-                                <button onClick={movenext} className="btn btn-danger mt-3">Next</button>
-                            </div>:
-                                <div>
-                                    <div>
-                                        <div className="mt-3 form-group">
-                                            <label class="d-flex justify-content-start">Description*:</label>
-                                            <textarea onChange={changeHandler} name="description" class="form-control" style = {{marginTop: "5px"}} rows="5">{formInfo.description}</textarea>
-                                            <p className="text-danger">{formErrors.description?.message}</p>
-                                        </div>
+                                    </div>
+                                    <div className="mt-2">
+                                        {endDate.end?
+                                            <p className={ styles.endDateHover } onClick={endDateAdd}>-End Time</p>:
+                                            <p className={ styles.endDateHover } onClick={endDateAdd}>+End Time</p>
+                                        }
                                     </div>
                                     <div className="form-group">
-                                        <label class="d-flex justify-content-start">Cuisine:</label>
-                                        <select onChange={changeHandler} className="form-select" style = {{marginTop: "5px"}} aria-label="Default select example" name="theme">
-                                            <option selected>Choose cuisine type</option>
+                                        <label class="d-flex justify-content-start">Neighborhood:</label>
+                                        <select onChange={changeHandler} className="form-select" style = {{marginTop: "5px"}} aria-label="Default select example" name="neighborhood">
+                                            <option value="">Choose your neighborhood</option>
                                             {
-                                                allCuisines.map((cuisine, i)=>{
-                                                    return (<option key = {i} value={cuisine}>{cuisine}</option>)
+                                                allNeighborhoods.map((neigh, i)=>{
+                                                    return (
+                                                        <option key = {i} value={neigh.neighName}>{neigh.neighName}</option>
+                                                    )
                                                 })
                                             }
-                                            <option value="Other">Other</option>
                                         </select>
                                         {/* <p className="text-danger">{formErrors.password?.message}</p> */}
-                                        </div>
-                                    <div className="mt-3 d-flex justify-content-between">
-                                        <button onClick={movenext} className="btn btn-danger mt-3">Back</button>
-                                        <input type="submit" value="Create Event" className="btn btn-danger mt-3" />
                                     </div>
-                                </div>
-                        }
-                    </form>
+                        
+                                    <button onClick={movenext} className="btn btn-danger mt-3">Next</button>
+                                </div>:
+                                    <div>
+                                        <div>
+                                            <div className="mt-3 form-group">
+                                                <label class="d-flex justify-content-start">Description*:</label>
+                                                <textarea onChange={changeHandler} name="description" class="form-control" style = {{marginTop: "5px"}} rows="5">{formInfo.description}</textarea>
+                                                <p className="text-danger">{formErrors.description?.message}</p>
+                                            </div>
+                                        </div>
+                                        <div className="form-group">
+                                            <label class="d-flex justify-content-start">Cuisine:</label>
+                                            <select onChange={changeHandler} className="form-select" style = {{marginTop: "5px"}} aria-label="Default select example" name="theme">
+                                                <option selected>Choose cuisine type</option>
+                                                {
+                                                    allCuisines.map((cuisine, i)=>{
+                                                        return (<option key = {i} value={cuisine}>{cuisine}</option>)
+                                                    })
+                                                }
+                                                <option value="Other">Other</option>
+                                            </select>
+                                            {/* <p className="text-danger">{formErrors.password?.message}</p> */}
+                                        </div>
+                                        <div className="mt-3 d-flex justify-content-between form-group">
+                                            <label class="d-flex justify-content-start">Paid Event? </label>
+                                            {/* ternary operator to prevent bug that uncheckes the checkbox after clicking the "back" button */}
+                                            {formInfo.isPaid?<input onChange={changeHandler} type="checkbox" name="isPaid" className="form-checkbox" value={formInfo.isPaid} checked/>:<input onChange={changeHandler} type="checkbox" name="isPaid" className="form-checkbox" value={formInfo.isPaid}/>}
+                                        </div>
+                                        {formInfo.isPaid?
+                                        <div className="form-group">
+                                            <label class="mt-3 d-flex justify-content-start">Price:</label>
+                                            <input onChange={changeHandler} type="number" name="price" className="form-control" value={formInfo.price} min="0" max="1000"/>
+                                        </div>:""}
+                                        <div className="mt-3 d-flex justify-content-between">
+                                            <button onClick={movenext} className="btn btn-danger mt-3">Back</button>
+                                            <input type="submit" value="Create Event" className="btn btn-danger mt-3" />
+                                        </div>
+                                    </div>
+                            }
+                        </form>
+                    </div>
                     {/* ======================EVENT PREVIEW DIV========================== */}
-                    <div className = {styles.eventPreview}>
-                        <h5>Event Preview</h5>
-                        <div>
-                            <div className={styles.display}>
-                                <div className={styles.red}></div>
-                                <div className={styles.white}>
-                                    <h4 className={styles.hFour}>{formInfo.startDate==""?<h4 style={{color: 'lightgrey', marginTop:"10px"}}>DD</h4>:moment(formInfo.startDate).format('DD')}</h4>
+                    <div className="col-8">
+                        <div className = {styles.eventPreview}>
+                            <h5>Event Preview</h5>
+                            <div>
+                                <div className={styles.display}>
+                                    <div className={styles.red}></div>
+                                    <div className={styles.white}>
+                                        <h4 className={styles.hFour}>{formInfo.startDate==""?<h4 style={{color: 'lightgrey', marginTop:"10px"}}>DD</h4>:moment(formInfo.startDate).format('DD')}</h4>
+                                    </div>
+                                    <div className="d-flex">
+                                        {formInfo.startDate==""?<h6 style={{color: 'lightgrey', marginTop:"10px"}}>EVENT DATE</h6>:<h6 className={styles.date}>{moment(formInfo.startDate).format('MMMM Do, YYYY').toUpperCase() + " "}</h6>}
+                                        {formInfo.startDate==""?"":formInfo.startTime==""?"":<h6 className={styles.date}>&nbsp;{formInfo.startTime}</h6>}
+                                        {/* end time & date conditionals */}
+                                        {formInfo.startDate==formInfo.endDate?"":formInfo.endTime==""?"":<h6 className={styles.date}>&nbsp;- {formInfo.endTime}</h6>}
+                                    </div>
+                                        {formInfo.startDate!=formInfo.endDate?"":formInfo.endTime==""?"":<h6 className={styles.date}>&nbsp;- {formInfo.endDate} {formInfo.endTime}</h6>}
+                                    <h4 className={styles.title}>{formInfo.title==""?<h4 style={{color: 'grey', fontWeight: 'bold'}}>Event Title</h4>:formInfo.title}</h4>
+                                    {loggedinuser?<p class="text-start fw-light">Hosted by <span class="fw-bolder">{loggedinuser.username}</span></p>:<p class="text-start fw-light">Hosted by</p>}
+                                    <hr />
+                                    <div>
+                                        <p className={styles.details}>
+                                        {formInfo.description}
+                                        </p>
+                                    </div>
+                                    {formInfo.isPaid?<button className="btn btn-danger d-flex justify-content-center">Buy Ticket</button>:<button className="btn btn-danger d-flex justify-content-center">Join</button>}
                                 </div>
-                                <div className="d-flex">
-                                    {formInfo.startDate==""?<h6 style={{color: 'lightgrey', marginTop:"10px"}}>EVENT DATE</h6>:<h6 className={styles.date}>{moment(formInfo.startDate).format('MMMM Do, YYYY').toUpperCase() + " "}</h6>}
-                                    {formInfo.startDate==""?"":formInfo.startTime==""?"":<h6 className={styles.date}>&nbsp;{formInfo.startTime}</h6>}
-                                    
-                                </div>
-
-                                <h4 className={styles.title}>{formInfo.title==""?<h4 style={{color: 'grey', fontWeight: 'bold'}}>Event Title</h4>:formInfo.title}</h4>
-                                {loggedinuser?<p class="text-start fw-light">Hosted by <span class="fw-bolder">{loggedinuser.username}</span></p>:<p class="text-start fw-light">Hosted by</p>}
-                                <hr />
-                                <div>
-                                    <p className={styles.details}>
-                                    {formInfo.description}
-                                    </p>
-                                </div>
-                                <button className="btn btn-danger d-flex justify-content-center">Join</button>
                             </div>
                         </div>
                     </div>
