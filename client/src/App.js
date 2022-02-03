@@ -7,6 +7,7 @@ import CreateEvent from './components/CreateEvent';
 import {BrowserRouter,Switch,Route,Link} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NeighborhoodEvents from './components/NeighborhoodEvents';
+import EventDetail from './components/EventDetails';
 
 function App() {
   return (
@@ -27,6 +28,9 @@ function App() {
           </Route>
           <Route exact path="/events/neighborhood/:neighborhoodId">
             <NeighborhoodEvents/>
+          </Route>
+          <Route exact path="/event/:id">
+            <EventDetail/>
           </Route>
         </Switch>
       </BrowserRouter>

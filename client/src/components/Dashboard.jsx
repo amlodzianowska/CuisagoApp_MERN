@@ -36,8 +36,11 @@ const Dashboard = () => {
     return (
         <div>
             <Navbar/>
-            {loggedinuser? <h2>Welcome {loggedinuser.username}</h2>:<h2>Please log in</h2>}
-                <Responsive allNeighborhoods = {allNeighborhoods}/>
+            {loggedinuser? <h6>Welcome {loggedinuser.username}!</h6>:<h6>Please log in</h6>}
+            <h1 style={{fontWeight:"bold", textAlign:"left", color: "#484848"}}>Discover culinary events</h1>
+            <h1 style={{fontWeight:"bold", textAlign:"left", color: "#484848", marginTop:"-15px"}}>hosted by your neighbors</h1>
+            <h3>Events in other neighborhoods</h3>
+            <Responsive allNeighborhoods = {allNeighborhoods}/>
         </div>
     );
 };

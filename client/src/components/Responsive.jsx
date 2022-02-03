@@ -10,7 +10,7 @@ export default class Responsive extends Component {
         dots: false,
         infinite: true,
         speed: 700,
-        slidesToShow: 5,
+        slidesToShow: 6,
         slidesToScroll: 1,
         nextArrow: <SampleNextArrow />,
         prevArrow: <SamplePrevArrow />,
@@ -67,16 +67,16 @@ export default class Responsive extends Component {
 
     
     return (
-        <div className="container">
-            <Slider {...settings}>
+
+            <Slider {...settings} style={{width:"90%", marginLeft:"90px"}}>
             {this.props.allNeighborhoods.map((n,i)=>{
                 return (
                     <Link key={i} to = {`/events/neighborhood/${n._id}`}>
-                        <div style={{ width:"250px"}}>
-                            <Card>
-                                <Card.Img variant="top" src={n.url} style={{ height:"280px", objectFit: "cover"}}/>
-                                <Card.Body>
-                                    <Card.Title>{n.neighName}</Card.Title>
+                        <div style={{margin:"10px", width:"230px", textDecoration:"none"}}>
+                            <Card style={{borderRadius:"15px", textDecoration:"none", boxShadow:"5px 5px 13px 5px lightgrey"}}>
+                                <Card.Img variant="top" src={n.url} style={{borderRadius:"15px 15px 0 0", height:"220px", objectFit: "cover"}}/>
+                                <Card.Body style={{ color:"black", textDecoration:"none"}}>
+                                    <Card.Title style={{ color:"black", textDecoration:"none"}}>{n.neighName}</Card.Title>
                                 </Card.Body>
                             </Card>
                         </div>
@@ -84,7 +84,6 @@ export default class Responsive extends Component {
             )})
             }
             </Slider>
-        </div>
     );
     }
 }

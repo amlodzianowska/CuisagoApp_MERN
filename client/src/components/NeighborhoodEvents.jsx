@@ -31,7 +31,7 @@ const NeighborhoodEvents = () => {
                             <Card.Body>
                                 <Card.Title>{event.title}</Card.Title>
                                 <Card.Text>{event.description}</Card.Text>
-                                <Link key={i} to = {`/events/${event._id}`}><Button variant="primary">See Details</Button></Link>
+                                <Link key={i} to = {`/event/${event._id}`}><Button variant="primary">See Details</Button></Link>
                             </Card.Body>
                         </Card>
                     </div>

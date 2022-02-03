@@ -35,7 +35,7 @@ const Navbar = () => {
                                 <a className="nav-link active" aria-current="page" href="/events/all">Events</a>
                                 </li> */}
                                 <li className="nav-item">
-                                <a className="nav-link active" aria-current="page" href="/create/event">Create an Event</a>
+                                <a className="nav-link active" aria-current="page" href="/create/event">Host an Event</a>
                                 </li>
                                 {/* <li className="nav-item">
                                 <a className="nav-link active" aria-current="page" href="/profile/edit">Edit Profile</a>
