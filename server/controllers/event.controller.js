@@ -50,7 +50,7 @@ class EventController {
     }
 
     findHostEvents(req,res){
-        Event.find({host_id:req.params.hostid}) //these are mongoose built-in methods
+        Event.find({hostId:req.params.hostid}) //these are mongoose built-in methods
             .populate("host_id", "username")
             .then(hostsEvents =>{
                 res.json({results: hostsEvents})
@@ -59,8 +59,8 @@ class EventController {
     }
 
     findNeighborhoodEvents(req,res){
-        Neighborhood.find({neighborhood_id:req.params.neighborhoodid}) //these are mongoose built-in methods
-            .populate("neighborhood_id", "username")
+        Event.find({neighborhood_id:req.params.neighborhoodId}) //these are mongoose built-in methods
+            .populate("neighborhood_id")
             .then(neighborhoodEvents =>{
                 res.json({results: neighborhoodEvents})
             })

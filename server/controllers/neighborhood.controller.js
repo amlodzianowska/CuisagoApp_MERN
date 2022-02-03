@@ -22,7 +22,6 @@ class NeighborhoodController {
     //watch for _id! (remembre underscore)
     findOneNeighborhood(req, res){
         Neighborhood.findOne({_id:req.params.id})
-            .populate("host_id")
             .then(foundNeighborhood=>{
                 res.json({results: foundNeighborhood})
             })

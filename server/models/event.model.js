@@ -44,22 +44,16 @@ const Event = mongoose.model(
         capacity: {
             type: Number
         },
-        hostId: 
+        host_id: 
             {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
             },
-        neighborhoodId: 
+        neighborhood_id: 
             {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Neighborhood"
             }
-        // guests: [
-        //     {
-        //     type: mongoose.Schema.Types.ObjectId,
-        //     ref: "User"
-        //     }
-        // ]
     },
     { timestamps: true }
 ));

@@ -10,35 +10,34 @@ const CreateEvent = () => {
     const [loggedinuser, setloggedinuser] = useState(null)
     const [loggedinId, setLoggedinId] = useState("");
     const [allNeighborhoods, setAllNeighborhoods] = useState([])
-    
-    
+    const [oneNeighborhoodId, setoOneNeighborhoodId] = useState("")
+    const [oneNeighborhood, setOneNeighborhood] = useState({
+        neighName: "",
+        url: ""
+    })
     const allCuisines = ["American", "Turkish", "French", "Chinese", "Japanese", "Indian", "Italian", "Greek", "Spanish", "Polish", "Mediterranean", "Mexican", "Brazilian", "Vegetarian", "Vegan", "Other"].sort()
     const dateToday = new Date()
-
     const [formInfo,setFormInfo] = useState({
         title: "",
         startDate: "",
         endDate: "",
         startTime: "",
         endTime: "",
-        neighborhood: "",
+        neighborhood_id: "",
         theme: "",
         description: "",
         isPaid: false,
         price: "",
-        hostId: ""
+        host_id: ""
     })
-
     const [formErrors, setFormErrors] = useState({
         title: "",
         startDate: "",
         endDate: "",
         startTime: "",
         endTime: "",
-        neighborhood: "",
         theme: "",
     })
-
     const [endDate, setEndDate] = useState({
         end : false
     })
@@ -47,6 +46,19 @@ const CreateEvent = () => {
     })
     
     useEffect(()=>{
+        if (oneNeighborhoodId==""){
+            console.log("No id yet")
+        }else{
+            axios.get(`http://localhost:8000/api/neighborhoods/${oneNeighborhoodId}`)
+                .then(response=>{
+                    console.log("response when getting one neighborhood: ", response)
+                    setOneNeighborhood(response.data.results)
+                })
+                .catch(err=>console.log("error: ", err))
+        }
+    },[oneNeighborhoodId])
+
+    useEffect(()=>{
         axios.get("http://localhost:8000/api/user/loggedin", {withCredentials:true})
         .then(res=>{
             console.log("logged in user data",res)
@@ -54,7 +66,7 @@ const CreateEvent = () => {
             setLoggedinId(res.data.user._id)
             setFormInfo({
                 ...formInfo,
-                hostId: loggedinId
+                host_id: loggedinId
         })
     })
         .catch(err=>{
@@ -99,10 +111,18 @@ const CreateEvent = () => {
                 [e.target.name]: !formInfo.isPaid
             })
         }else{
-            setFormInfo({
-                ...formInfo,
-                [e.target.name]: e.target.value
-            })
+            if (e.target.name == "neighborhood"){
+                setFormInfo({
+                    ...formInfo,
+                    neighborhood_id: e.target.value
+                })
+                setoOneNeighborhoodId(e.target.value)
+            }else{
+                setFormInfo({
+                    ...formInfo,
+                    [e.target.name]: e.target.value
+                })
+            }
         }
     }
 
@@ -110,21 +130,22 @@ const CreateEvent = () => {
         e.preventDefault()
         axios.post("http://localhost:8000/api/events", formInfo)
             .then(response=>{
-                console.log("response when creating an event", response)
-
                 if(response.data.err){ //if the form is not filled out properly
                     console.log("create event error", response.data.err.errors)
                     setFormErrors(response.data.err.errors)
                 }else{
-                    console.log("success")
                     setFormInfo({
                         title: "",
                         startDate: "",
                         endDate: "",
                         startTime: "",
                         endTime: "",
-                        neighborhood: "",
-                        theme: ""
+                        neighborhood_id: "",
+                        theme: "",
+                        description: "",
+                        isPaid: false,
+                        price: "",
+                        host_id: ""
                     })
                     //if there's any existing previouse error messages, clear them out upon submittal
                     setFormErrors({
@@ -234,7 +255,7 @@ const CreateEvent = () => {
                                             {
                                                 allNeighborhoods.map((neigh, i)=>{
                                                     return (
-                                                        <option key = {i} value={neigh.neighName}>{neigh.neighName}</option>
+                                                        <option key = {i} value={neigh._id}>{neigh.neighName}</option>
                                                     )
                                                 })
                                             }
@@ -308,6 +329,9 @@ const CreateEvent = () => {
                                         {formInfo.description}
                                         </p>
                                     </div>
+                                    
+                                    {oneNeighborhoodId?<img src={oneNeighborhood.url} alt="neighborhood" height="150px"/>:""}
+                                    {oneNeighborhoodId?<p>{oneNeighborhood.neighName}</p>:""}
                                     {formInfo.isPaid?<button className="btn btn-danger d-flex justify-content-center">Buy Ticket</button>:<button className="btn btn-danger d-flex justify-content-center">Join</button>}
                                 </div>
                             </div>
