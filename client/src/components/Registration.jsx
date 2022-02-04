@@ -1,19 +1,18 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {useHistory} from "react-router-dom";
 import Login from './Login';
 
 const Registration = () => {
     const history = useHistory()
-    const allNeighborhoods = ["River North", "Lincoln Park", "Chinatown", "Hyde Park", "Little Village", "Garfield Park", "Lake View", "West Loop", "Logan Square", "Austin", "Englewood", "South Chicago", "Little Italy", "Wicker Park", "South Loop", "Albany Park", "Humboldt Park", "Old Town", "Fulton Market", "Wrigleyville", "Back of the Yards", "Bronzeville", "Roscoe Village", "Ukrainian Village", "Bucktown", "Printer's Row"].sort()
+    const [allNeighborhoods, setAllNeighborhoods] = useState([])
 
     const [formInfo,setFormInfo] = useState({
         username: "",
         email: "",
         password: "",
         confirmPassword: "",
-        neighborhood: "",
-        birthday: ""
+        neighborhood_id: ""
     })
 
     const [formErrors, setFormErrors] = useState({
@@ -29,6 +28,15 @@ const Registration = () => {
             [e.target.name]: e.target.value
         })
     }
+
+    useEffect(()=>{
+        axios.get("http://localhost:8000/api/neighborhoods")
+            .then(response=>{
+                console.log("response when getting all neighborhoods: ", response)
+                setAllNeighborhoods(response.data.results)
+            })
+            .catch(err=>console.log("error: ", err))
+    },[])
 
     const register = (e) => {
         e.preventDefault()
@@ -46,8 +54,7 @@ const Registration = () => {
                         email: "",
                         password: "",
                         confirmPassword: "",
-                        neighborhood: "",
-                        birthday: ""
+                        neighborhood_id: "",
                     })
 
                     //if there's any existing previouse error messages, clear them out upon submittal
@@ -94,24 +101,20 @@ const Registration = () => {
 
                         <div className="form-group">
                             <label>Neighborhood:</label>
-                            <select onChange={changeHandler} className="form-select" aria-label="Default select example" name="neighborhood">
+                            <select onChange={changeHandler} className="form-select" style = {{marginTop: "5px"}} aria-label="Default select example" name="neighborhood_id">
                                 <option value="">Choose your neighborhood</option>
                                 {
                                     allNeighborhoods.map((neigh, i)=>{
                                         return (
-                                            <option key = {i} value={neigh}>{neigh}</option>
+                                            <option key = {i} value={neigh._id}>{neigh.neighName}</option>
                                         )
                                     })
                                 }
                             </select>
-                            {/* <p className="text-danger">{formErrors.password?.message}</p> */}
+                            <p className="text-danger">{formErrors.neighborhood_id?.message}</p>
                         </div>
 
-                        <div className="form-group">
-                            <label>Birthday:</label>
-                            <input onChange={changeHandler} type="date" name="birthday" className="form-control" value={formInfo.birthday}/>
-                            {/* <p className="text-danger">{formErrors.birthday?.message}</p> */}
-                        </div>
+                        
 
                         <input type="submit" value="Sign Up" className="btn btn-success mt-3" />
                     </form>

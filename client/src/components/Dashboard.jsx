@@ -6,11 +6,15 @@ import Card from 'react-bootstrap/Card';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 import Responsive from './Responsive';
+import ResponsiveB from './ResponsiveB';
 
 const Dashboard = () => {
     const history = useHistory()
     const [loggedinuser, setloggedinuser] = useState(null)
     const [allNeighborhoods, setAllNeighborhoods] = useState([])
+    const [allEvents, setAllEvents] = useState([])
+    const italian = allEvents.filter(item => item.theme === "Italian")
+    const eventsInMyNeigh = allEvents.filter(item => item.neighborhood_id === loggedinuser.neighborhood_id)
 
     useEffect(()=>{
         axios.get("http://localhost:8000/api/user/loggedin", {withCredentials:true})
@@ -32,15 +36,28 @@ const Dashboard = () => {
             .catch(err=>console.log("error: ", err))
     },[])
 
+    useEffect(()=>{
+        axios.get("http://localhost:8000/api/events")
+            .then(response=>{
+                console.log("response when getting all events: ", response)
+                setAllEvents(response.data.results)
+            })
+            .catch(err=>console.log("error: ", err))
+    },[])
+
+    const buttonClick = () => {
+        console.log(eventsInMyNeigh)
+    }
+
 
     return (
         <div>
-            <Navbar/>
             {loggedinuser? <h6>Welcome {loggedinuser.username}!</h6>:<h6>Please log in</h6>}
+            <h1 style={{fontWeight:"bold", textAlign:"left", color: "#484848"}}>Discover culinary events in Chicago</h1>
+            <Responsive allNeighborhoods = {allNeighborhoods}/>
             <h1 style={{fontWeight:"bold", textAlign:"left", color: "#484848"}}>Discover culinary events</h1>
             <h1 style={{fontWeight:"bold", textAlign:"left", color: "#484848", marginTop:"-15px"}}>hosted by your neighbors</h1>
-            <h3>Events in other neighborhoods</h3>
-            <Responsive allNeighborhoods = {allNeighborhoods}/>
+            <ResponsiveB eventsInMyNeigh = {eventsInMyNeigh}/>
         </div>
     );
 };

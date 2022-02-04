@@ -8,6 +8,9 @@ const UserSchema = new mongoose.Schema(
             required: [true, "Username is required!"],
             minlength: [2, "Username must be at least 2 characters long!"],
         },
+        profilePicUrl: {
+            type: String
+        },
         email: {
             type: String,
             required: [true, "Email is required!"],
@@ -24,9 +27,12 @@ const UserSchema = new mongoose.Schema(
         birthday:{
             type: Date
         },
-        neighborhood: {
-            type: String
-        },
+        neighborhood_id: 
+            {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Neighborhood",
+            required: [true, "Select neighborhood!"]
+            },
         foodPreferences: {
             type: String
         },

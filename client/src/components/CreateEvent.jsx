@@ -193,13 +193,13 @@ const CreateEvent = () => {
 
 
 
+
     return (
         <div className={ styles.backgroundColor }>
-            <Navbar/>
-            <div className="container" style = {{marginTop:"20px"}}>
+            <div className="container" >
                 <div className="row">
-                    <div className="col-4">
-                        <form onSubmit={createEvent} className="container" className={styles.formBox}>
+                    <div className="col-4" >
+                        <form onSubmit={createEvent} className={styles.formBox} >
                             {next.next?
                                 <div>
                                     <div className="form-group">

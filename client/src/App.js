@@ -8,10 +8,12 @@ import {BrowserRouter,Switch,Route,Link} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NeighborhoodEvents from './components/NeighborhoodEvents';
 import EventDetail from './components/EventDetails';
+import Navbar from './components/Navbar';
 
 function App() {
   return (
     <div className="App">
+      <Navbar/>
       <BrowserRouter>
         <Switch>
           <Route exact path="/">
