@@ -1,76 +1,35 @@
-import React, { Component } from "react";
-import Slider from "react-slick";
-import Card from 'react-bootstrap/Card';
-import {BrowserRouter,Switch,Route,Link} from "react-router-dom";
+import React, {useState, useEffect} from 'react';
+import axios from 'axios';
+import {useHistory} from "react-router-dom";
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import Card from '@material-ui/core/Card';
 
 
-export default class Responsive extends Component {
-    render() {
-    var settings = {
-        dots: false,
-        infinite: true,
-        speed: 700,
-        slidesToShow: 4,
-        slidesToScroll: 1,
-        nextArrow: <SampleNextArrow />,
-        prevArrow: <SamplePrevArrow />,
-        initialSlide: 0,
-        responsive: [
-        {
-            breakpoint: 1024,
-            settings: {
-            slidesToShow: 3,
-            slidesToScroll: 3,
-            infinite: true,
-            dots: true,
-            },
-        },
-        {
-            breakpoint: 600,
-            settings: {
-            slidesToShow: 2,
-            slidesToScroll: 2,
-            initialSlide: 2,
-            },
-        },
-        {
-            breakpoint: 480,
-            settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            },
-        },
-        ],
-    };
+const ResponsiveB = () => {
+    const history = useHistory()
+    const [loggedinuser, setloggedinuser] = useState(null)
+    const [allNeighborhoods, setAllNeighborhoods] = useState([])
+    const [allEvents, setAllEvents] = useState([])
+    const italian = allEvents.filter(item => item.theme === "Italian")
+    const eventsInMyNeigh = allEvents.filter(item => item.neighborhood_id === loggedinuser.neighborhood_id)
 
-    function SampleNextArrow(props) {
-        const { className, style, onClick } = props;
-        return (
-            <div
-                className={className}
-                style={{ ...style, display: "block", background: "red"}}
-                onClick={onClick}
-            />
-            );
-        }
-
-    function SamplePrevArrow(props) {
-        const { className, style, onClick } = props;
-        return (
-            <div
-                className={className}
-                style={{ ...style, display: "block", background: "green" }}
-                onClick={onClick}
-            />
-        );
-    }
-    const buttonClick = () => {
-        console.log(this.props.eventsInMyNeigh)
-    }
     
     return (
         <>
-            <Slider {...settings} style={{width:"90%", marginLeft:"90px"}}>
+
+            <Grid container spacing={2} justifyContent="center">
+                <Grid item xs={8} sm={6}>
+                <Paper style={{objectFit: "cover", backgroundImage: `url(https://www.indianhealthyrecipes.com/wp-content/uploads/2015/10/pizza-recipe-1-500x500.jpg)`, height:75, width:`100%`}}/>
+                </Grid>
+                <Grid item xs={8} sm={6}>
+                <Paper style={{height:75, width:`100%`}}/>
+                </Grid>
+                <Grid item xs={8} sm={6}>
+                <Paper style={{height:75, width:`100%`}}/>
+                </Grid>
+            </Grid>
+            {/* <Slider {...settings} style={{width:"90%", marginLeft:"90px"}}>
             {this.props.eventsInMyNeigh.map((e,i)=>{
                 return (
                     <Link key={i} to = {`/events/neighborhood/${e._id}`}>
@@ -85,8 +44,9 @@ export default class Responsive extends Component {
                     </Link>
             )})
             }
-            </Slider>
+            </Slider> */}
         </>
     );
-    }
 }
+
+export default ResponsiveB;

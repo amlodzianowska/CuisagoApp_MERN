@@ -15,5 +15,6 @@ require("./server/config/mongoose.config");
 require("./server/routes/user.routes")(app)
 require("./server/routes/event.routes")(app)
 require("./server/routes/neighborhood.routes")(app)
+require("./server/routes/comment.routes")(app)
 
 app.listen(port, ()=>console.log(`listening on port ${port}`))

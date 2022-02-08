@@ -9,11 +9,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import NeighborhoodEvents from './components/NeighborhoodEvents';
 import EventDetail from './components/EventDetails';
 import Navbar from './components/Navbar';
+import Container from '@material-ui/core/Container';
+import {makeStyles, ThemeProvider, createTheme} from '@material-ui/core/styles';
+
 
 function App() {
   return (
     <div className="App">
+      {/* <ThemeProvider theme="secondary"> */}
       <Navbar/>
+      <hr/>
+      <Container maxWidth="lg">
       <BrowserRouter>
         <Switch>
           <Route exact path="/">
@@ -36,6 +42,8 @@ function App() {
           </Route>
         </Switch>
       </BrowserRouter>
+      </Container>
+      {/* </ThemeProvider> */}
     </div>
   );
 }

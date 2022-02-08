@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Slider from "react-slick";
 import Card from 'react-bootstrap/Card';
 import {BrowserRouter,Switch,Route,Link} from "react-router-dom";
+import styles from './Responsive.module.css';
 
 
 export default class Responsive extends Component {
@@ -10,7 +11,7 @@ export default class Responsive extends Component {
         dots: false,
         infinite: true,
         speed: 700,
-        slidesToShow: 6,
+        slidesToShow: 5,
         slidesToScroll: 1,
         nextArrow: <SampleNextArrow />,
         prevArrow: <SamplePrevArrow />,
@@ -48,7 +49,7 @@ export default class Responsive extends Component {
         return (
             <div
                 className={className}
-                style={{ ...style, display: "block", background: "red"}}
+                style={{ ...style, display: "block", background: "red" }}
                 onClick={onClick}
             />
             );
@@ -67,20 +68,19 @@ export default class Responsive extends Component {
 
     
     return (
-
-            <Slider {...settings} style={{width:"90%", marginLeft:"90px"}}>
+            <Slider {...settings} >
             {this.props.allNeighborhoods.map((n,i)=>{
                 return (
-                    <Link key={i} to = {`/events/neighborhood/${n._id}`}>
+                    <a className={styles.sliderCardTitle} href={`/events/neighborhood/${n._id}`}>
                         <div style={{margin:"10px", width:"230px", textDecoration:"none"}}>
-                            <Card style={{borderRadius:"15px", textDecoration:"none", boxShadow:"5px 5px 13px 5px lightgrey"}}>
+                            <Card style={{borderRadius:"15px", textDecoration:"none"}}>
                                 <Card.Img variant="top" src={n.url} style={{borderRadius:"15px 15px 0 0", height:"220px", objectFit: "cover"}}/>
-                                <Card.Body style={{ color:"black", textDecoration:"none"}}>
-                                    <Card.Title style={{ color:"black", textDecoration:"none"}}>{n.neighName}</Card.Title>
+                                <Card.Body>
+                                    <Card.Title>{n.neighName}</Card.Title>
                                 </Card.Body>
                             </Card>
                         </div>
-                    </Link>
+                    </a>
             )})
             }
             </Slider>

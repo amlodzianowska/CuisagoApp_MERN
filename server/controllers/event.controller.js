@@ -23,6 +23,7 @@ class EventController {
     findOneEvent(req, res){
         Event.findOne({_id:req.params.id})
             .populate("host_id")
+            .populate("neighborhood_id")
             .then(foundEvent=>{
                 res.json({results: foundEvent})
             })

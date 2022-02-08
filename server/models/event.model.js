@@ -8,7 +8,11 @@ const Event = mongoose.model(
         title: {
             type: String,
             required: [true, "Title is required!"],
-            minlength: [2, "Title must be at least 2 characters long!"],
+            minlength: [2, "Title must be at least 2 characters long!"]
+        },
+        picUrl: {
+            type: String,
+            required: [true, "Picture URL is required!"]
         },
         startDate:{
             type: Date,

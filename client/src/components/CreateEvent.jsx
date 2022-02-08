@@ -19,6 +19,7 @@ const CreateEvent = () => {
     const dateToday = new Date()
     const [formInfo,setFormInfo] = useState({
         title: "",
+        picUrl: "",
         startDate: "",
         endDate: "",
         startTime: "",
@@ -32,6 +33,7 @@ const CreateEvent = () => {
     })
     const [formErrors, setFormErrors] = useState({
         title: "",
+        picUrl: "",
         startDate: "",
         endDate: "",
         startTime: "",
@@ -136,6 +138,7 @@ const CreateEvent = () => {
                 }else{
                     setFormInfo({
                         title: "",
+                        picUrl: "",
                         startDate: "",
                         endDate: "",
                         startTime: "",
@@ -150,6 +153,7 @@ const CreateEvent = () => {
                     //if there's any existing previouse error messages, clear them out upon submittal
                     setFormErrors({
                         title: "",
+                        picUrl: "",
                         startDate: "",
                         endDate: "",
                         startTime: "",
@@ -190,9 +194,6 @@ const CreateEvent = () => {
             })
         }
     }
-
-
-
 
     return (
         <div className={ styles.backgroundColor }>
@@ -267,6 +268,11 @@ const CreateEvent = () => {
                                 </div>:
                                     <div>
                                         <div>
+                                            <div className="form-group">
+                                            <label class="d-flex justify-content-start">Background Picture URL*:</label>
+                                            <input onChange={changeHandler} type="text" name="picUrl" className="form-control" style = {{marginTop: "5px"}} value={formInfo.picUrl} placeholder="Paste Picture URL" />
+                                            {/* <p className="text-danger">{formErrors.picUrl?.message}</p> */}
+                                        </div>
                                             <div className="mt-3 form-group">
                                                 <label class="d-flex justify-content-start">Description*:</label>
                                                 <textarea onChange={changeHandler} name="description" class="form-control" style = {{marginTop: "5px"}} rows="5">{formInfo.description}</textarea>

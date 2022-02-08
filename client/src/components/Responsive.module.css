@@ -1,0 +1,9 @@
+a.sliderCardTitle {
+    text-decoration: none;
+    color: black;
+}
+
+a.sliderCardTitle:hover {
+    text-decoration: none;
+    color: #f50057;
+}
