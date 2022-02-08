@@ -71,9 +71,9 @@ const Registration = () => {
 
     return (
         <div className="container">
-            <h2>Register Below</h2>
             <div className="row">
                 <div className="col-6">
+                    <h2>Register Below</h2>
                     <form onSubmit={register}>
                         <div className="form-group">
                             <label>Username*:</label>
@@ -85,6 +85,11 @@ const Registration = () => {
                             <label>Email*:</label>
                             <input onChange={changeHandler} type="text" name="email" className="form-control" value={formInfo.email} />
                             <p className="text-danger">{formErrors.email?.message}</p>
+                        </div>
+
+                        <div className="form-group">
+                            <label>Profile Pic URL:</label>
+                            <input onChange={changeHandler} type="text" name="profilePicUrl" className="form-control"/>
                         </div>
 
                         <div className="form-group">

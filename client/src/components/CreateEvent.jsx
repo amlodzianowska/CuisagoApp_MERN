@@ -84,9 +84,6 @@ const CreateEvent = () => {
             })
             .catch(err=>console.log("error: ", err))
     },[])
-    
-    
-
 
     const changeHandler = (e)=>{
         // formatting time from input to a 12 hour standard
@@ -316,19 +313,28 @@ const CreateEvent = () => {
                             <h5>Event Preview</h5>
                             <div>
                                 <div className={styles.display}>
-                                    <div className={styles.red}></div>
-                                    <div className={styles.white}>
-                                        <h4 className={styles.hFour}>{formInfo.startDate==""?<h4 style={{color: 'lightgrey', marginTop:"10px"}}>DD</h4>:moment(formInfo.startDate).format('DD')}</h4>
+
+                                    <div className="row">
+                                        <div className="col-6">
+                                            <div className={styles.red}></div>
+                                            <div className={styles.white}>
+                                                <h4 className={styles.hFour}>{formInfo.startDate==""?<h4 style={{color: 'lightgrey', marginTop:"10px"}}>DD</h4>:moment(formInfo.startDate).format('DD')}</h4>
+                                            </div>
+                                            <div className="d-flex">
+                                                {formInfo.startDate==""?<h6 style={{color: 'lightgrey', marginTop:"10px"}}>EVENT DATE</h6>:<h6 className={styles.date}>{moment(formInfo.startDate).format('MMMM Do, YYYY').toUpperCase() + " "}</h6>}
+                                                {formInfo.startDate==""?"":formInfo.startTime==""?"":<h6 className={styles.date}>&nbsp;{formInfo.startTime}</h6>}
+                                                {/* end time & date conditionals */}
+                                                {formInfo.startDate==formInfo.endDate?"":formInfo.endTime==""?"":<h6 className={styles.date}>&nbsp;- {formInfo.endTime}</h6>}
+                                            </div>
+                                                {formInfo.startDate!=formInfo.endDate?"":formInfo.endTime==""?"":<h6 className={styles.date}>&nbsp;- {formInfo.endDate} {formInfo.endTime}</h6>}
+                                            <h4 className={styles.title}>{formInfo.title==""?<h4 style={{color: 'grey', fontWeight: 'bold'}}>Event Title</h4>:formInfo.title}</h4>
+                                            {loggedinuser?<p class="text-start fw-light">Hosted by <span class="fw-bolder">{loggedinuser.username}</span></p>:<p class="text-start fw-light">Hosted by</p>}
+                                        </div>
+                                        <div className="col-6">
+                                            {formInfo.picUrl?<img style={{height:"200px", borderRadius: 10}} src={formInfo.picUrl}/>:""}
+                                        </div>
                                     </div>
-                                    <div className="d-flex">
-                                        {formInfo.startDate==""?<h6 style={{color: 'lightgrey', marginTop:"10px"}}>EVENT DATE</h6>:<h6 className={styles.date}>{moment(formInfo.startDate).format('MMMM Do, YYYY').toUpperCase() + " "}</h6>}
-                                        {formInfo.startDate==""?"":formInfo.startTime==""?"":<h6 className={styles.date}>&nbsp;{formInfo.startTime}</h6>}
-                                        {/* end time & date conditionals */}
-                                        {formInfo.startDate==formInfo.endDate?"":formInfo.endTime==""?"":<h6 className={styles.date}>&nbsp;- {formInfo.endTime}</h6>}
-                                    </div>
-                                        {formInfo.startDate!=formInfo.endDate?"":formInfo.endTime==""?"":<h6 className={styles.date}>&nbsp;- {formInfo.endDate} {formInfo.endTime}</h6>}
-                                    <h4 className={styles.title}>{formInfo.title==""?<h4 style={{color: 'grey', fontWeight: 'bold'}}>Event Title</h4>:formInfo.title}</h4>
-                                    {loggedinuser?<p class="text-start fw-light">Hosted by <span class="fw-bolder">{loggedinuser.username}</span></p>:<p class="text-start fw-light">Hosted by</p>}
+
                                     <hr />
                                     <div>
                                         <p className={styles.details}>

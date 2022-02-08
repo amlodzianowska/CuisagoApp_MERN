@@ -27,10 +27,10 @@ const NeighborhoodEvents = () => {
                 return (
                     <div style={{ width:"250px"}}>
                         <Card>
-                            <Card.Img variant="top" src="https://www.indianhealthyrecipes.com/wp-content/uploads/2015/10/pizza-recipe-1-500x500.jpg" style={{ height:"280px", objectFit: "cover"}}/>
+                            <Card.Img variant="top" src={event.picUrl} style={{ height:"280px", objectFit: "cover"}}/>
                             <Card.Body>
                                 <Card.Title>{event.title}</Card.Title>
-                                <Card.Text>{event.description}</Card.Text>
+                                {/* <Card.Text>{event.description}</Card.Text> */}
                                 <Link key={i} to = {`/event/${event._id}`}><Button variant="primary">See Details</Button></Link>
                             </Card.Body>
                         </Card>

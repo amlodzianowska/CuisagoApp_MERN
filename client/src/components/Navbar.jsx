@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {useHistory} from "react-router-dom";
 import axios from 'axios'
 import Typography from '@material-ui/core/Typography';
@@ -14,8 +14,19 @@ import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
 
 const Navbar = () => {
-
+    const [loggedinuser, setloggedinuser] = useState(null)
     const history = useHistory()
+
+    useEffect(()=>{
+        axios.get("http://localhost:8000/api/user/loggedin", {withCredentials:true})
+            .then(res=>{
+                console.log("logged in user data",res)
+                setloggedinuser(res.data.user)
+            })
+            .catch(err=>{
+                console.log(err)
+            })
+    }, [])
 
     const logout = (e)=>{
         e.preventDefault()
@@ -34,17 +45,17 @@ const Navbar = () => {
         borderRadius: theme.shape.borderRadius,
         backgroundColor: alpha(theme.palette.common.white, 0.15),
         '&:hover': {
-          backgroundColor: alpha(theme.palette.common.white, 0.25),
+            backgroundColor: alpha(theme.palette.common.white, 0.25),
         },
         marginLeft: 0,
         width: '100%',
         [theme.breakpoints.up('sm')]: {
-          marginLeft: theme.spacing(1),
-          width: 'auto',
+            marginLeft: theme.spacing(1),
+            width: 'auto',
         },
-      }));
-      
-      const SearchIconWrapper = styled('div')(({ theme }) => ({
+    }));
+
+    const SearchIconWrapper = styled('div')(({ theme }) => ({
         padding: theme.spacing(0, 2),
         height: '100%',
         position: 'absolute',
@@ -52,24 +63,24 @@ const Navbar = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-      }));
-      
-      const StyledInputBase = styled(InputBase)(({ theme }) => ({
+    }));
+
+    const StyledInputBase = styled(InputBase)(({ theme }) => ({
         color: 'inherit',
         '& .MuiInputBase-input': {
-          padding: theme.spacing(1, 1, 1, 0),
+            padding: theme.spacing(1, 1, 1, 0),
           // vertical padding + font size from searchIcon
-          paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-          transition: theme.transitions.create('width'),
-          width: '100%',
-          [theme.breakpoints.up('sm')]: {
-            width: '12ch',
-            '&:focus': {
-              width: '20ch',
+            paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+            transition: theme.transitions.create('width'),
+            width: '100%',
+            [theme.breakpoints.up('sm')]: {
+                width: '12ch',
+                '&:focus': {
+                    width: '20ch',
+                },
             },
-          },
         },
-      }));
+    }));
 
     return (
         <div>
@@ -83,9 +94,7 @@ const Navbar = () => {
                 <Button href="/dashboard" variant="h6">
                     Home
                 </Button>
-                <Button>
-                    Login
-                </Button>
+                <Button onClick={logout}>Logout</Button>
                 <Search>
                     <SearchIconWrapper>
                     <SearchIcon />

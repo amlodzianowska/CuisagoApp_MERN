@@ -7,8 +7,7 @@ const Comment = mongoose.model(
     new mongoose.Schema({
         text: {
             type: String,
-            required: [true, "Comment must be at least 10 characters long!"],
-            minlength: [10, "Comment must be at least 10 characters long!"]
+            required: [true, "Comment must be at least 1 character long!"],
         },
         author_id: 
             {

@@ -3,10 +3,15 @@ import axios from 'axios';
 import { BrowserRouter,Link,Switch,Route,useHistory } from "react-router-dom";
 import { useParams } from "react-router";
 import moment from 'moment';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import Add from '@material-ui/icons/Add';
+import Avatar from '@material-ui/core/Avatar';
+
 
 const EventDetail = () => {
+    const [submitToggle, setSubmitToggle] = useState(false);
     const {id} = useParams();
     const [oneEvent, setOneEvent] = useState({})
     const [loggedinuser, setloggedinuser] = useState(null)
@@ -17,10 +22,15 @@ const EventDetail = () => {
         event_id: "",
         author_id: ""
     })
+    const [guest, setGuest] = useState({
+        guest_id: "",
+        event_id: ""
+    })
     const [commentErrors, setCommentErrors] = useState({
         text: ""
     })
     const [allComments, setAllComments] = useState([])
+    const [allGuests, setAllGuests] = useState([])
 
     useEffect(()=>{
         axios.get("http://localhost:8000/api/user/loggedin", {withCredentials:true})
@@ -47,10 +57,23 @@ const EventDetail = () => {
                     event_id: response.data.results._id,
                     author_id: loggedinuser._id
                 })
+                setGuest({
+                    event_id: response.data.results._id,
+                    guest_id: loggedinuser._id
+                })
                 console.log("comment: ", comment)
             })
             .catch(err=>console.log("error: ", err))
     },[loggedinuser])
+
+    useEffect(()=>{
+        axios.get(`http://localhost:8000/api/guests/event/${oneEvent._id}`)
+            .then(response=>{
+                console.log("response when getting all event's guests: ", response)
+                setAllGuests(response.data.results)
+            })
+            .catch(err=>console.log("error: ", err))
+    },[submitToggle])
 
     useEffect(()=>{
         axios.get(`http://localhost:8000/api/comments/event/${oneEvent._id}`)
@@ -59,13 +82,24 @@ const EventDetail = () => {
                 setAllComments(response.data.results)
             })
             .catch(err=>console.log("error: ", err))
-    },[oneEvent])
+    },[submitToggle])
+
 
     const deleteEvent = ()=>{
         axios.delete(`http://localhost:8000/api/events/${id}`)
             .then(response=>{
                 console.log("response when deleting one event: ", response)
-                history.push("/")
+                history.push("/dashboard")
+            })
+            .catch(err=>console.log("error: ", err))
+    }
+
+    const joinEvent = (e)=>{
+        e.preventDefault()
+        axios.post(`http://localhost:8000/api/guests`, guest)
+            .then(response=>{
+                console.log("response when joining an event: ", response)
+                setSubmitToggle(!submitToggle)
             })
             .catch(err=>console.log("error: ", err))
     }
@@ -88,13 +122,10 @@ const EventDetail = () => {
                     console.log("post comment error", response.data.err.errors)
                     setCommentErrors(response.data.err.errors)
                 }else{
+                    setSubmitToggle(!submitToggle)
                     setComment({
                         ...comment,
                     text:""
-                    })
-                    //if there's any existing previouse error messages, clear them out upon submittal
-                    setCommentErrors({
-                        text: ""
                     })
                 }
             })
@@ -104,28 +135,32 @@ const EventDetail = () => {
 
     return (
         <div className="container">
-            <h1>Hello</h1>
-            <h3>{oneEvent.title}</h3>
-            <img src="https://www.indianhealthyrecipes.com/wp-content/uploads/2015/10/pizza-recipe-1-500x500.jpg" alt="Event" height="200px"/>
+            <Typography variant="h3">{oneEvent.title}</Typography>
+            <img src={oneEvent.picUrl} alt="Event" height="200px"/>
+            {oneEvent.host_id?<Typography variant="h6">Event hosted by {oneEvent.host_id.username}</Typography>:<Typography variant="h4">Event hosted by </Typography>}
+            {oneEvent.host_id?<Avatar alt={oneEvent.host_id.username} src={oneEvent.host_id.profilePicUrl} />:""}
             <h4>Event date: {moment(oneEvent.startDate).format("MMM Do, YY")}</h4>
-            {matcher?<button onClick={deleteEvent} className="btn btn-danger">Delete</button>:<button className="btn btn-info">Join Event</button>}
-            {/* {loggedinuser?<button onClick={deleteEvent} className="btn btn-danger">Delete</button>:<button className="btn btn-info">Join Event</button>} */}
+            {matcher?<button onClick={deleteEvent} className="btn btn-danger">Delete</button>:<button onClick={joinEvent} className="btn btn-info">Join Event</button>}
+            {/* <button onClick={joinEvent} className="btn btn-danger">Join Event</button> */}
             {
             allComments==undefined?<p>No comments yet!</p>:allComments.map((comment,i)=>{
                 return (
+                    <div key={i}>
+                        <p>{comment.text}</p>
+                        <p>{comment.author_id.username}</p>
+                    </div>
+                )})
+            }
+            {
+            allGuests==undefined?<p>No Guests yet!</p>:allGuests.map((guest,i)=>{
+                return (
                     <>
-                        <p key={i}>{comment.text}</p>
-                        <p key={i}>{comment.author_id.username}</p>
+                        <p text="danger" key={i}>{guest.guest_id.username}</p>
                     </>
                 )})
             }
-            <Form >
-                <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                    <Form.Label>Example textarea</Form.Label>
-                    <Form.Control onChange={changeHandler} as="textarea" rows={3} ></Form.Control>
-                </Form.Group>
-            </Form>
-            <Button onClick={postComment} variant="light">Comment</Button>
+            <TextField onChange={changeHandler} placeholder="Add a comment..." variant="outlined" color="secondary" rows={2} tyle="date" value={comment.text}></TextField>
+            <Button round onClick={postComment} startIcon={<Add/>} variant="outlined" color="secondary"/>
             
         </div>
     )

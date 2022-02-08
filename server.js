@@ -16,5 +16,6 @@ require("./server/routes/user.routes")(app)
 require("./server/routes/event.routes")(app)
 require("./server/routes/neighborhood.routes")(app)
 require("./server/routes/comment.routes")(app)
+require("./server/routes/guest.routes")(app)
 
 app.listen(port, ()=>console.log(`listening on port ${port}`))
