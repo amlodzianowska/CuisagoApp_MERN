@@ -8,7 +8,8 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Add from '@material-ui/icons/Add';
 import Avatar from '@material-ui/core/Avatar';
-
+import { Stack } from '@mui/material';
+import Grid from '@material-ui/core/Grid';
 
 const EventDetail = () => {
     const [submitToggle, setSubmitToggle] = useState(false);
@@ -135,22 +136,22 @@ const EventDetail = () => {
 
     return (
         <div className="container">
+            <Typography variant="p">{oneEvent.neighborhood_id.neighName}  {oneEvent.theme}</Typography>
             <Typography variant="h3">{oneEvent.title}</Typography>
-            <img src={oneEvent.picUrl} alt="Event" height="200px"/>
-            {oneEvent.host_id?<Typography variant="h6">Event hosted by {oneEvent.host_id.username}</Typography>:<Typography variant="h4">Event hosted by </Typography>}
-            {oneEvent.host_id?<Avatar alt={oneEvent.host_id.username} src={oneEvent.host_id.profilePicUrl} />:""}
-            <h4>Event date: {moment(oneEvent.startDate).format("MMM Do, YY")}</h4>
-            {matcher?<button onClick={deleteEvent} className="btn btn-danger">Delete</button>:<button onClick={joinEvent} className="btn btn-info">Join Event</button>}
+            <img src={oneEvent.picUrl} alt="Event" height="300px"/>
+            
+            <Stack direction="row" spacing={2}>
+                {oneEvent.host_id?<Typography variant="h6">Event hosted by {oneEvent.host_id.username}</Typography>:<Typography variant="h4">Event hosted by </Typography>}
+                {oneEvent.host_id?<Avatar alt={oneEvent.host_id.username} src={oneEvent.host_id.profilePicUrl} />:""}
+            </Stack>
+            <Typography variant="h6">Event date: {moment(oneEvent.startDate).format("MMM Do, YY")} @ {oneEvent.startTime}</Typography>
+            <hr/>
+            <Typography variant="h4">What you'll do</Typography>
+            <Typography variant="p">{oneEvent.description}</Typography>
+            <Stack>{matcher?<button onClick={deleteEvent} className="btn btn-danger">Delete</button>:<button onClick={joinEvent} className="btn btn-info">Join Event</button>}</Stack>
+            
             {/* <button onClick={joinEvent} className="btn btn-danger">Join Event</button> */}
-            {
-            allComments==undefined?<p>No comments yet!</p>:allComments.map((comment,i)=>{
-                return (
-                    <div key={i}>
-                        <p>{comment.text}</p>
-                        <p>{comment.author_id.username}</p>
-                    </div>
-                )})
-            }
+            
             {
             allGuests==undefined?<p>No Guests yet!</p>:allGuests.map((guest,i)=>{
                 return (
@@ -159,8 +160,28 @@ const EventDetail = () => {
                     </>
                 )})
             }
-            <TextField onChange={changeHandler} placeholder="Add a comment..." variant="outlined" color="secondary" rows={2} tyle="date" value={comment.text}></TextField>
-            <Button round onClick={postComment} startIcon={<Add/>} variant="outlined" color="secondary"/>
+            {
+            allComments==undefined?<p>No comments yet!</p>:
+            <div backgroundColor="pink">
+                {allComments.map((comment,i)=>{
+                    return (
+                        <div key={i}>
+                            <Stack direction="row" spacing={1}>
+                                <Avatar alt={loggedinuser.username} src={loggedinuser.profilePicUrl} />
+                                <Stack justifyContent="flex-start" spacing={-0.5}>
+                                    <Typography text="bold" variant="p">{comment.author_id.username}</Typography>
+                                    <Typography variant="p">{comment.text}</Typography>
+                                </Stack>
+                            </Stack>
+                        </div>
+                    )})}
+            </div>
+            }
+            <Stack className="mt-4" justifyContent="center" direction="row" spacing={2}>
+                <TextField onChange={changeHandler} placeholder="Add a comment..." variant="outlined" color="secondary" tyle="date" value={comment.text}></TextField>
+                <Avatar color="secondary" style={{cursor: "pointer", backgroundColor:"pink"}} onClick={postComment}>+</Avatar>
+            </Stack>
+            
             
         </div>
     )

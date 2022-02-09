@@ -12,6 +12,7 @@ import { Container } from 'react-bootstrap';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
+import Avatar from '@material-ui/core/Avatar';
 
 const Navbar = () => {
     const [loggedinuser, setloggedinuser] = useState(null)
@@ -104,6 +105,8 @@ const Navbar = () => {
                     inputProps={{ 'aria-label': 'search' }}
                     />
                 </Search>
+                
+                {/* <Button color="secondary"><Avatar alt={loggedinuser.username} src={loggedinuser.profilePicUrl}/> {loggedinuser.username}</Button> */}
                 </Toolbar>
                 </Container>
             </AppBar>
