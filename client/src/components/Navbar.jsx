@@ -85,7 +85,7 @@ const Navbar = () => {
 
     return (
         <div>
-            <AppBar variant="secondary" color="whte" style={{boxShadow: "none", height: "100px"}}>
+            <AppBar variant="secondary" color="white" style={{boxShadow: "none", height: "100px"}}>
                 <Container>
                 <Toolbar>
                 <img src="/images/logo.png" alt="logo" height="40px" />
@@ -105,8 +105,8 @@ const Navbar = () => {
                     inputProps={{ 'aria-label': 'search' }}
                     />
                 </Search>
+                {loggedinuser?<Button color="secondary"><Avatar alt={loggedinuser.username} src={loggedinuser.profilePicUrl}/>{loggedinuser.username}</Button>:"" }
                 
-                {/* <Button color="secondary"><Avatar alt={loggedinuser.username} src={loggedinuser.profilePicUrl}/> {loggedinuser.username}</Button> */}
                 </Toolbar>
                 </Container>
             </AppBar>

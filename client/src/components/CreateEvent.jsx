@@ -196,7 +196,7 @@ const CreateEvent = () => {
         <div className={ styles.backgroundColor }>
             <div className="container" >
                 <div className="row">
-                    <div className="col-4" >
+                    <div className="col-3" >
                         <form onSubmit={createEvent} className={styles.formBox} >
                             {next.next?
                                 <div>
@@ -308,14 +308,14 @@ const CreateEvent = () => {
                         </form>
                     </div>
                     {/* ======================EVENT PREVIEW DIV========================== */}
-                    <div className="col-8">
+                    <div className="col-9">
                         <div className = {styles.eventPreview}>
                             <h5>Event Preview</h5>
                             <div>
                                 <div className={styles.display}>
 
                                     <div className="row">
-                                        <div className="col-6">
+                                        <div className="col-7">
                                             <div className={styles.red}></div>
                                             <div className={styles.white}>
                                                 <h4 className={styles.hFour}>{formInfo.startDate==""?<h4 style={{color: 'lightgrey', marginTop:"10px"}}>DD</h4>:moment(formInfo.startDate).format('DD')}</h4>
@@ -330,7 +330,7 @@ const CreateEvent = () => {
                                             <h4 className={styles.title}>{formInfo.title==""?<h4 style={{color: 'grey', fontWeight: 'bold'}}>Event Title</h4>:formInfo.title}</h4>
                                             {loggedinuser?<p class="text-start fw-light">Hosted by <span class="fw-bolder">{loggedinuser.username}</span></p>:<p class="text-start fw-light">Hosted by</p>}
                                         </div>
-                                        <div className="col-6">
+                                        <div className="col-5">
                                             {formInfo.picUrl?<img style={{height:"200px", borderRadius: 10}} src={formInfo.picUrl}/>:""}
                                         </div>
                                     </div>

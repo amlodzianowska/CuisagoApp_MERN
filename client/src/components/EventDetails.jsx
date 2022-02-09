@@ -136,7 +136,8 @@ const EventDetail = () => {
 
     return (
         <div className="container">
-            <Typography variant="p">{oneEvent.neighborhood_id.neighName}  {oneEvent.theme}</Typography>
+            {oneEvent.neighborhood_id?<Typography variant="p"><a href={`/events/neighborhood/${oneEvent.neighborhood_id._id}`}>{oneEvent.neighborhood_id.neighName}</a> {oneEvent.theme}</Typography>:""}
+            
             <Typography variant="h3">{oneEvent.title}</Typography>
             <img src={oneEvent.picUrl} alt="Event" height="300px"/>
             
@@ -167,10 +168,11 @@ const EventDetail = () => {
                     return (
                         <div key={i}>
                             <Stack direction="row" spacing={1}>
-                                <Avatar alt={loggedinuser.username} src={loggedinuser.profilePicUrl} />
+                                <Avatar alt={comment.author_id.username} src={comment.author_id.profilePicUrl} />
                                 <Stack justifyContent="flex-start" spacing={-0.5}>
                                     <Typography text="bold" variant="p">{comment.author_id.username}</Typography>
                                     <Typography variant="p">{comment.text}</Typography>
+                                    <Typography variant="p">{moment(comment.createdAt).fromNow()}</Typography>
                                 </Stack>
                             </Stack>
                         </div>
@@ -178,6 +180,8 @@ const EventDetail = () => {
             </div>
             }
             <Stack className="mt-4" justifyContent="center" direction="row" spacing={2}>
+                {loggedinuser?<Avatar alt={loggedinuser.username} src={loggedinuser.profilePicUrl} />:""}
+                
                 <TextField onChange={changeHandler} placeholder="Add a comment..." variant="outlined" color="secondary" tyle="date" value={comment.text}></TextField>
                 <Avatar color="secondary" style={{cursor: "pointer", backgroundColor:"pink"}} onClick={postComment}>+</Avatar>
             </Stack>

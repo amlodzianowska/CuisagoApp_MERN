@@ -52,10 +52,9 @@ const Dashboard = () => {
             {loggedinuser? <h6>Welcome {loggedinuser.username}!</h6>:<h6>Please log in</h6>}
             <h1 style={{fontWeight:"bold", textAlign:"left", color: "#484848"}}>Discover culinary events in Chicago</h1>
             <Responsive allNeighborhoods = {allNeighborhoods}/>
-            <h1 style={{fontWeight:"bold", textAlign:"left", color: "#484848"}}>Discover culinary events</h1>
-            <h1 style={{fontWeight:"bold", textAlign:"left", color: "#484848", marginTop:"-15px"}}>hosted by your neighbors</h1>
-            <ResponsiveB eventsInMyNeigh = {eventsInMyNeigh}/>
-            <NeighborhoodsGrid allNeighborhoods = {allNeighborhoods} eventsInMyNeigh = {eventsInMyNeigh} />
+            <h1 className="mt-5" style={{fontWeight:"bold", textAlign:"left", color: "#484848"}}>Discover culinary events</h1>
+            <h1  style={{fontWeight:"bold", textAlign:"left", color: "#484848", marginTop:"-15px"}}>hosted by your neighbors</h1>
+            <NeighborhoodsGrid eventsInMyNeigh = {eventsInMyNeigh} />
         </div>
     );
 };

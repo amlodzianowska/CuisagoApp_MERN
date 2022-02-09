@@ -2,8 +2,13 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import { BrowserRouter,Link,Switch,Route,useHistory } from "react-router-dom";
 import { useParams } from "react-router";
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
+import Grid from '@material-ui/core/Grid';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
 
 const NeighborhoodEvents = () => {
@@ -21,23 +26,33 @@ const NeighborhoodEvents = () => {
 
 
     return (
-        <div>
-            <h1>Check out the neighborhood events</h1>
+        <div>{allEvents[0].neighborhood_id?<h1>Check out the events in {allEvents[0].neighborhood_id.neighName}</h1>:""}
+            
+            <Grid className="mt-4" container spacing={2} justifyContent="center">
             {
-                allEvents.map((event,i)=>{
-                return (
-                    <div style={{ width:"250px"}}>
-                        <Card>
-                            <Card.Img variant="top" src={event.picUrl} style={{ height:"280px", objectFit: "cover"}}/>
-                            <Card.Body>
-                                <Card.Title>{event.title}</Card.Title>
-                                {/* <Card.Text>{event.description}</Card.Text> */}
-                                <Link key={i} to = {`/event/${event._id}`}><Button variant="primary">See Details</Button></Link>
-                            </Card.Body>
+            allEvents.map((e,i)=>{
+            return (
+                <div style={{ width:"250px"}}>
+                    <Grid>
+                        <Card sx={{ maxWidth: 200}}>
+                            <CardMedia
+                                component="img"
+                                height="140"
+                                image={e.picUrl}
+                                alt="green iguana"
+                            />
+                            <CardContent>
+                                <Typography>{e.title}</Typography>
+                            </CardContent>
+                            <CardActions>
+                            <Button href={`/event/${e._id}`} variant="secondary">SEE DETAILS</Button>
+                            </CardActions>
                         </Card>
-                    </div>
+                    </Grid>
+                </div>
             )})
             }
+            </Grid>
         </div>
     )
 }
